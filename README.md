@@ -1,8 +1,12 @@
-# Group-12
-Group Leader: Hunter Mitchell (contact@hunter.dev)
-Dustin Brown (dtb91@msstate.edu)
-Derek Wills (dpw9@msstate.edu)
-Andrew Wilson (amw1295@msstate.edu)
+# Team MemeMail
+
+Group Leader: Hunter Mitchell (huntermitchell) 
+
+Dustin Brown (Dustin5219) 
+
+Derek Wills (bigdwired) 
+
+Andrew Wilson (amw1295)
 
 # Technical Information
 ## Front-End
