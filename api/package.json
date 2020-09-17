@@ -1,0 +1,34 @@
+{
+  "name": "mememail-api",
+  "version": "1.0.0",
+  "description": "The REST API for the MemeMail service",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Intro-to-SE-Lab-Fall-20/Group-12.git"
+  },
+  "keywords": [
+    "MemeMail"
+  ],
+  "author": "Group-12",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/Intro-to-SE-Lab-Fall-20/Group-12/issues"
+  },
+  "homepage": "https://github.com/Intro-to-SE-Lab-Fall-20/Group-12#readme",
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^4.1.1",
+    "mongoose": "^5.10.5"
+  },
+  "devDependencies": {
+    "eslint": "^7.9.0",
+    "nodemon": "^2.0.4"
+  }
+}
