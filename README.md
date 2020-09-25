@@ -1,10 +1,10 @@
 # Team MemeMail
 
-Group Leader: Hunter Mitchell (huntermitchell) 
+Group Leader: Hunter Mitchell (huntermitchell)
 
-Dustin Brown (Dustin5219) 
+Dustin Brown (Dustin5219)
 
-Derek Wills (bigdwired) 
+Derek Wills (bigdwired)
 
 Andrew Wilson (amw1295)
 
@@ -26,15 +26,28 @@ At the beginning of the project, the group was given four primary requirements. 
 We were given an open-ended choice of what programming language and framework to achieve these objectives. The primary feature that the group focused on was sending email. The full description of our email client can be viewed under "User Stories"
 
 # Technical Information
-## Front-End
-- Angular
-- TypeScript
-- SCSS (CSS)
-- AWS S3 / CloudFront
-
-## Back-End
+### Languages / Libraries
 - NodeJS (ExpressJS)
+- HTML/JavaScript
+- CSS
+- EJS
 - JavaScript
 
- ### Database(s)
-- TBD
+### Server Stack
+- AWS S3 / CloudFront
+
+### Database(s)
+- MongoDB (Mongoose Driver)
+
+# Technical Info About MemeMail
+
+This is the code for the MemeMail Service
+
+## Build
+Run `npm start` to spin up the webapp locally.
+
+## Development
+Run `npm run dev` to spin up the webapp locally for development. The app will automatically reload if you change any of the source files.
+
+## Test
+Run `npm test` to run tests.
