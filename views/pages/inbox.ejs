@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <%- include("../partials/head.ejs"); %>
+        <link rel="stylesheet" href="/assets/css/inbox.css">
+    </head>
+
+    <body>
+        <%- include("../partials/navigation.ejs"); %>
+
+        <div class="row-fluid">
+            <div class="container-fluid px-0">
+                <div class="content-wrapper align-items-start">
+                    <div class="inbox-sidebar">
+                        <div class="sidebar-section">
+                            <a href="/compose" class="btn btn-danger btn-block">New Email</a>
+
+                            <ul>
+                                <li class="title">Menu</li>
+                                <li>
+                                    <a href="#"><i class="fa fa-inbox"></i> Inbox <span class="badge badge-danger">0</span></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-star"></i> Stared</a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-rocket"></i> Sent</a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-trash-o"></i> Trash</a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-bookmark"></i> Important</span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="inbox-content">
+                        <ul>
+                            <li class="inbox-item">
+                                <a href="/inbox/12345">
+                                    <span class="inbox-item-title">Name of Sender</span>
+                                    <span class="inbox-item-description">Subject - Some Text in the email</span>
+                                    <span class="inbox-item-timestamp">3:00 PM</span>
+                                </a>
+                            </li>
+                            <li class="inbox-item">
+                                <a href="/inbox/12345">
+                                    <span class="inbox-item-title">Name of Sender</span>
+                                    <span class="inbox-item-description">Subject - Some Text in the email</span>
+                                    <span class="inbox-item-timestamp">3:00 PM</span>
+                                </a>
+                            </li>
+                            <li class="inbox-item">
+                                <a href="/inbox/12345">
+                                    <span class="inbox-item-title">Name of Sender</span>
+                                    <span class="inbox-item-description">Subject - Some Text in the email</span>
+                                    <span class="inbox-item-timestamp">3:00 PM</span>
+                                </a>
+                            </li>
+                            <li class="inbox-item">
+                                <a href="/inbox/12345">
+                                    <span class="inbox-item-title">Name of Sender</span>
+                                    <span class="inbox-item-description">Subject - Some Text in the email</span>
+                                    <span class="inbox-item-timestamp">3:00 PM</span>
+                                </a>
+                            </li>
+                            <li class="inbox-item">
+                                <a href="/inbox/12345">
+                                    <span class="inbox-item-title">Name of Sender</span>
+                                    <span class="inbox-item-description">Subject - Some Text in the email</span>
+                                    <span class="inbox-item-timestamp">3:00 PM</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+
+</html>
