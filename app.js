@@ -23,6 +23,42 @@ app.use(helmet());
 // Parse body content (JSON)
 app.use(express.json());
 
+// Configure Passport
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID || "",
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    callbackURL: process.env.GOOGLE_REDIRECT_URL || ""
+}, async (accessToken, refreshToken, profile, cb) => {
+    try {
+        const user = await User.findOneAndUpdate({ googleId: profile.id }, {
+            firstName: profile.name.givenName,
+            lastName: profile.name.familyName,
+            email: profile.emails[0].value,
+            googleId: profile.id
+        }, { upsert: true, new: true });
+
+        return cb(null, user);
+    }
+    catch (error) {
+        return cb(error, null);
+    }
+}
+));
+
+passport.serializeUser((user, cb) => {
+    return cb(null, user.id);
+});
+
+passport.deserializeUser(async (id, cb) => {
+    User.findById(id, (err, user) => {
+        cb(err, user);
+    });
+});
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 // Set View Engine
 app.set("view engine", "ejs");
 
