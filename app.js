@@ -2,6 +2,8 @@ const dotenv = require("dotenv");
 const express = require("express");
 const helmet = require("helmet");
 
+require("./mongoose")(process.env.APPLICATION_DATABASE_URL);
+
 const routes = require("./routes");
 
 // Load env variables from .env file
