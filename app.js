@@ -1,10 +1,10 @@
 const dotenv = require("dotenv");
 const express = require("express");
 const helmet = require("helmet");
+const path = require("path");
 
 require("./mongoose")(process.env.APPLICATION_DATABASE_URL);
 
-const routes = require("./routes");
 
 // Load env variables from .env file
 dotenv.config({
@@ -23,6 +23,12 @@ app.use(helmet());
 // Parse body content (JSON)
 app.use(express.json());
 
+// Set View Engine
+app.set("view engine", "ejs");
+
+// Serve static assets from the assets directory
+app.use("/assets", express.static(path.join(__dirname, "views/assets")))
+
 // CORS Stuff
 app.use((req, res, next) => {
     // Set Access Control Headers
@@ -31,7 +37,7 @@ app.use((req, res, next) => {
 });
 
 // Register Routes
-app.use("/", routes);
+app.use("/", require("./routes"));
 
 // Catch 404s
 app.use((req, res, next) => {
