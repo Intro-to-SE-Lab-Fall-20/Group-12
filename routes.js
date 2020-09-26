@@ -1,14 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-
 const { RequireAuth } = require("./middleware");
 
 // Register Routes for the MemeMail API
 router.get("/", (req, res) => {
     if (req.isAuthenticated()) {
         return res.redirect("/inbox");
-    }es
+    }
     return res.render("pages/index");
 });
 
