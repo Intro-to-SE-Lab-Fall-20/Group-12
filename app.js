@@ -1,15 +1,16 @@
-const dotenv = require("dotenv");
 const express = require("express");
 const helmet = require("helmet");
 const path = require("path");
 
 require("./mongoose")(process.env.APPLICATION_DATABASE_URL);
 
+const session = require("express-session");
 
-// Load env variables from .env file
-dotenv.config({
-    path: (process.env.NODE_ENV === "production") ? ".env.prod" : ".env.dev"
-});
+const passport = require("passport");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+
+const User = require("./models/User");
+const { Console } = require("console");
 
 // Create the express server
 const app = express();
@@ -18,10 +19,19 @@ const app = express();
 app.enable("trust proxy");
 
 // Basic security measures
-app.use(helmet());
+app.use(helmet({
+    contentSecurityPolicy: false, // Not in real production tho
+}));
 
 // Parse body content (JSON)
 app.use(express.json());
+
+// Setup express sessions
+app.use(session({
+    secret: process.env.APPLICATION_COOKIE_SECRET || "secret",
+    resave: true,
+    saveUninitialized: true
+}));
 
 // Configure Passport
 passport.use(new GoogleStrategy({
@@ -58,7 +68,6 @@ passport.deserializeUser(async (id, cb) => {
 app.use(passport.initialize());
 app.use(passport.session());
 
-
 // Set View Engine
 app.set("view engine", "ejs");
 
@@ -85,6 +94,7 @@ app.use((req, res, next) => {
 
 // Handle Errors
 app.use((error, req, res, next) => {
+    console.log(error);
     return res.status(error.status || 500).send({
         message: error.message || "An unknown server error occurred"
     });
