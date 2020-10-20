@@ -1,0 +1,12 @@
+#search_button{
+  display: block;
+  margin-left: auto;
+}
+
+#search_text{
+  width:100%;
+}
+
+#search_form{
+  width:100%;
+}

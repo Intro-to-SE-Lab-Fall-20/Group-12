@@ -27,6 +27,7 @@ router.get("/logout", (req, res) => {
 
 // Other Routes
 router.get("/inbox", RequireAuth, async (req, res) => {
+    const q = req.query.query_text;
     const oauthClient = new google.auth.OAuth2({
         clientID: process.env.GOOGLE_CLIENT_ID || "",
         clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
@@ -45,6 +46,7 @@ router.get("/inbox", RequireAuth, async (req, res) => {
         userId: "me",
         maxResults: 10,
         labelIds: "INBOX",
+        q:q,
         includeSpamTrash: false
     });
 
