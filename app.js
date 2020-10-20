@@ -44,7 +44,8 @@ passport.use(new GoogleStrategy({
             firstName: profile.name.givenName,
             lastName: profile.name.familyName,
             email: profile.emails[0].value,
-            googleId: profile.id
+            googleId: profile.id,
+            googleAccessToken: accessToken
         }, { upsert: true, new: true });
 
         return cb(null, user);
