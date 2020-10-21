@@ -11,44 +11,51 @@
 
         <div class="row-fluid">
             <div class="container-fluid px-0">
-                <div class="content-wrapper align-items-start">
-                    <div class="inbox-sidebar">
-                        <div class="sidebar-section">
-                            <a href="/compose" class="btn btn-danger btn-block">New Email</a>
+                <div class="content-wrapper">
+                    <div id="inbox-sidebar">
+                        <div class="inbox-sidebar">
+                            <div class="sidebar-section">
+                                <a href="/compose" class="btn btn-danger btn-block">New Email</a>
 
-                            <ul>
-                                <li class="title">Menu</li>
-                                <li>
-                                    <a href="#"><i class="fa fa-inbox"></i> Inbox <span class="badge badge-danger">0</span></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-star"></i> Stared</a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-rocket"></i> Sent</a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-trash-o"></i> Trash</a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-bookmark"></i> Important</span></a>
-                                </li>
-                            </ul>
+                                <ul>
+                                    <li class="title">Menu</li>
+                                    <li>
+                                        <a href="/inbox"><i class="fa fa-inbox"></i> Inbox <% if (meta.unread > 0) { %> <span class="badge badge-danger"><%= meta.unread %></span> <% } %></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"><i class="fa fa-star"></i> Stared</a>
+                                    </li>
+                                    <li>
+                                        <a href="#"><i class="fa fa-rocket"></i> Sent</a>
+                                    </li>
+                                    <li>
+                                        <a href="#"><i class="fa fa-trash-o"></i> Trash</a>
+                                    </li>
+                                    <li>
+                                        <a href="#"><i class="fa fa-bookmark"></i> Important</span></a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="inbox-content">
-                        <ul>
-                            <% inbox.forEach(function(email){ %>
-                                <li class="inbox-item">
-                                    <a href="/inbox/12345">
-                                        <span class="inbox-item-title"><%= email.subject.value %></span>
-                                        <span class="inbox-item-description"><%= email.snippet %></span>
-                                        <span class="inbox-item-timestamp">Oct 15, 3:00 PM</span>
-                                    </a>
-                                </li>
-                            <% }); %>
-                        </ul>
+                    <div id="inbox-content">
+                        <div class="inbox-content">
+                            <ul>
+                                <% inbox.forEach(function(email){ %>
+                                    <li class="inbox-item <%= (email.unread) ? 'unread' : '' %>">
+                                        <a href="/message/<%= email.googleId %>">
+                                            <div class="inbox-item-top-detail">
+                                                <span class="inbox-item-title"><%= email.from %></span>
+                                                <span class="inbox-item-timestamp"><%= email.date %></span>
+                                            </div>
+                                            <!-- DANGER (Here we are accepting character that Google says they escape!!!) -->
+                                            <span class="inbox-item-description"><%- email.snippet %></span>
+                                        </a>
+                                    </li>
+                                <% }); %>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>

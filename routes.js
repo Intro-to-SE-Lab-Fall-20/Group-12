@@ -1,9 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-const { RequireAuth } = require("./middleware");
-const { google } = require("googleapis");
-const { OAuth2Client } = require("google-auth-library");
+const { RequireAuth, GmailAPIMiddleware } = require("./middleware");
+
+const dayjs = require("dayjs");
+const tz = require("dayjs/plugin/timezone");
+const rt = require("dayjs/plugin/relativeTime");
+
+dayjs.extend(tz);
+dayjs.extend(rt);
 
 // Register Routes for the MemeMail API
 router.get("/", (req, res) => {
@@ -23,25 +28,11 @@ router.get("/auth/google/callback", passport.authenticate("google", { failureRed
 router.get("/logout", (req, res) => {
     req.logout();
     return res.redirect("/");
-})
+});
 
 // Other Routes
-router.get("/inbox", RequireAuth, async (req, res) => {
-    const oauthClient = new google.auth.OAuth2({
-        clientID: process.env.GOOGLE_CLIENT_ID || "",
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-        callbackURL: process.env.GOOGLE_REDIRECT_URL || ""
-    });
-
-    // Set the User's API Key
-    oauthClient.setCredentials({ access_token: req.user.googleAccessToken });
-
-    const gmail = google.gmail({
-        version: "v1",
-        auth: oauthClient
-    });
-
-    const messageResponse = await gmail.users.messages.list({
+router.get("/inbox", RequireAuth, GmailAPIMiddleware, async (req, res) => {
+    const messageResponse = await req.gmail.users.messages.list({
         userId: "me",
         maxResults: 10,
         labelIds: "INBOX",
@@ -52,10 +43,14 @@ router.get("/inbox", RequireAuth, async (req, res) => {
     const inbox = [];
     const messages = messageResponse.data.messages;
     for (let i = 0; i < messages.length; i++) {
-        const emailResponse = await gmail.users.messages.get({
+        const emailResponse = await req.gmail.users.messages.get({
             userId: "me",
             id: messages[i].id
         });
+
+        const GetHeaderValue = (key) => {
+            return emailResponse.data.payload.headers.find(x => x.name.toLowerCase() == key.toLowerCase()).value;
+        };
 
         // As usual, it wouldn't be Google if their API didn't suck
         // Parse through all this shit and wrap it in our own data structure that makes sense
@@ -64,17 +59,22 @@ router.get("/inbox", RequireAuth, async (req, res) => {
             googleThreadId: messages[i].threadId,
             unread: emailResponse.data.labelIds.includes("UNREAD"),
             labels: emailResponse.data.labelIds,
-            date: emailResponse.data.payload.headers.find(x => x.name === "Date"),
-            from: emailResponse.data.payload.headers.find(x => x.name === "From"),
-            to: emailResponse.data.payload.headers.find(x => x.name === "To"),
-            subject: emailResponse.data.payload.headers.find(x => x.name === "Subject"),
+            date: dayjs(Number(emailResponse.data.internalDate)).format("MMM DD, YYYY @ H:mm A"),
+            dateRelative: dayjs().from(dayjs(Number(emailResponse.data.internalDate))),
+            from: GetHeaderValue("From"),
+            to: GetHeaderValue("To"),
+            subject: GetHeaderValue("Subject"),
             snippet: emailResponse.data.snippet,
             body: emailResponse.data.payload.parts,
             attachments: []
         });
     }
 
-    return res.render("pages/inbox", { user: req.user, inbox });
+    const meta = {
+        unread: inbox.filter(x => x.unread).length
+    }
+
+    return res.render("pages/inbox", { user: req.user, inbox, meta });
 });
 
 module.exports = router;
