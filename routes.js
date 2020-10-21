@@ -32,16 +32,18 @@ router.get("/logout", (req, res) => {
 
 // Other Routes
 router.get("/inbox", RequireAuth, GmailAPIMiddleware, async (req, res) => {
+    const q = req.query.query_text;
     const messageResponse = await req.gmail.users.messages.list({
         userId: "me",
         maxResults: 10,
         labelIds: "INBOX",
+        q,
         includeSpamTrash: false
     });
 
     // Iterate through the messages and pull down more information
     const inbox = [];
-    const messages = messageResponse.data.messages;
+    const messages = messageResponse.data.messages || [];
     for (let i = 0; i < messages.length; i++) {
         const emailResponse = await req.gmail.users.messages.get({
             userId: "me",
@@ -74,7 +76,7 @@ router.get("/inbox", RequireAuth, GmailAPIMiddleware, async (req, res) => {
         unread: inbox.filter(x => x.unread).length
     }
 
-    return res.render("pages/inbox", { user: req.user, inbox, meta });
+    return res.render("pages/inbox", { user: req.user, inbox, meta, query: q });
 });
 
 module.exports = router;
