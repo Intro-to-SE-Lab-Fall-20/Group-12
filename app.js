@@ -2,9 +2,10 @@ const express = require("express");
 const helmet = require("helmet");
 const path = require("path");
 
-require("./mongoose")(process.env.APPLICATION_DATABASE_URL);
+const mongoose = require("./mongoose")(process.env.APPLICATION_DATABASE_URL);
 
 const session = require("express-session");
+const MongoStore = require("connect-mongo")(session);
 
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
@@ -30,7 +31,11 @@ app.use(express.json());
 app.use(session({
     secret: process.env.APPLICATION_COOKIE_SECRET || "secret",
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
+    },
+    store: new MongoStore({ mongooseConnection: mongoose.connection })
 }));
 
 // Configure Passport
