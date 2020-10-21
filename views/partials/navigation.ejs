@@ -1,15 +1,19 @@
+
+<head>
+        <link rel="stylesheet" href="/assets/css/navigation.css">
+</head>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light" style="margin-bottom: 20px; border-bottom: 1px solid #CCC">
     <a class="navbar-brand" href="/">MemeMail</a>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav">
-            <li class="nav-item active">
-                <a class="nav-link" href="/inbox">Inbox</a>
-            </li>
-        </ul>
+        <form class="form-inline my-2 my-lg-0" method="get">
+            <input id="searchbox" name="query_text" value="<%= query %>" class="form-control mr-sm-2" type="search" placeholder="Search Emails" aria-label="Search">
+        </form>
     </div>
 
     <div class="navbar-collapse collapse w-100">
