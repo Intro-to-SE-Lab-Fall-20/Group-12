@@ -1,18 +1,22 @@
 .content-wrapper {
     display: flex;
+    padding: 0 15px;
 }
 
-.inbox-sidebar {
-    margin: 0 0 0 15px;
+#inbox-sidebar {
+    flex-shrink: 1;
 }
 
-.inbox-content {
-    margin: 0 15px;
+#inbox-content {
+    flex-grow: 1;
+    margin-left: 15px;
+    overflow: hidden;
 }
 
 /* Sidebar */
 .inbox-sidebar {
-    width: 300px;
+    min-width: 250px;
+    max-width: 350px;
     margin-bottom: 15px;
 }
 
@@ -71,7 +75,6 @@
 
 /* Inbox List */
 .inbox-content {
-    flex-grow: 1;
     background: #FFF;
     border: 1px solid #CCC;
 }
@@ -87,7 +90,7 @@
 }
 
 .inbox-content ul > li:hover {
-    background: #efefef;
+    background: #ebebeb !important;
 }
 
 .inbox-content ul > li:last-child {
@@ -96,26 +99,41 @@
 
 .inbox-content ul > li > a {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     color: inherit;
     padding: 8px 10px;
+    /* border-left: 5px solid transparent; */
 }
 
-.inbox-content ul > li > a > .inbox-item-title {
-    font-weight: 600;
+.inbox-content ul > li.unread { background: #FFF; }
+
+.inbox-content ul > li.unread .inbox-item-title { font-weight: 600; }
+
+.inbox-content ul > li > a > .inbox-item-top-detail {
+    display: flex;
+    justify-content: space-between;
 }
 
-.inbox-content ul > li > a > .inbox-item-description {
-    display: inline-block;
+.inbox-content ul > li > a > .inbox-item-top-detail > .inbox-item-title {
+    flex-grow: 1;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    flex-grow: 1;
-    margin-left: 15px;
 }
 
-.inbox-content ul > li > a > .inbox-item-timestamp {
-    margin-left: 15px;
+.inbox-content ul > li > a > .inbox-item-description {
+    flex-grow: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
+
+.inbox-content ul > li.unread > a {
+    /* border-color: #2e86de; */
+}
+
+.inbox-content ul > li { background: #efefef; }
+.inbox-content ul > li .inbox-item-title { font-weight: normal; }
 
 .inbox-content ul > li > a:hover { text-decoration: none; }
