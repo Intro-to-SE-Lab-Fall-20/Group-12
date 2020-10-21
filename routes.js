@@ -52,7 +52,7 @@ router.get("/inbox", RequireAuth, async (req, res) => {
 
     // Iterate through the messages and pull down more information
     const inbox = [];
-    const messages = messageResponse.data.messages;
+    const messages = messageResponse.data.messages || [];
     for (let i = 0; i < messages.length; i++) {
         const emailResponse = await gmail.users.messages.get({
             userId: "me",
