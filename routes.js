@@ -46,7 +46,7 @@ router.get("/inbox", RequireAuth, async (req, res) => {
         userId: "me",
         maxResults: 10,
         labelIds: "INBOX",
-        q:q,
+        q,
         includeSpamTrash: false
     });
 
@@ -76,7 +76,7 @@ router.get("/inbox", RequireAuth, async (req, res) => {
         });
     }
 
-    return res.render("pages/inbox", { user: req.user, inbox });
+    return res.render("pages/inbox", { user: req.user, inbox, query: q });
 });
 
 module.exports = router;

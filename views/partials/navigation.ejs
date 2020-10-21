@@ -9,9 +9,12 @@
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <form id="search_form" method="get" >
-        <input id="search_text" name="query_text" type="text" /><button id="search_button" type="submit">Search Emails</button>
-    </form>
+
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <form class="form-inline my-2 my-lg-0" method="get">
+            <input id="searchbox" name="query_text" value="<%= query %>" class="form-control mr-sm-2" type="search" placeholder="Search Emails" aria-label="Search">
+        </form>
+    </div>
 
     <div class="navbar-collapse collapse w-100">
         <ul class="navbar-nav ml-auto">

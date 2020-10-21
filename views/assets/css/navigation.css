@@ -1,12 +1,8 @@
-#search_button{
-  display: block;
-  margin-left: auto;
+.navbar-brand {
+  /* text-align: center;
+  width: calc(300px + 15px); */
 }
 
-#search_text{
-  width:100%;
-}
-
-#search_form{
-  width:100%;
+#searchbox {
+  min-width: 350px;
 }

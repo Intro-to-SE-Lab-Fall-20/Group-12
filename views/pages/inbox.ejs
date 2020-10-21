@@ -38,8 +38,10 @@
                     </div>
 
                     <div class="inbox-content">
-                        <ul>
-                            <% inbox.forEach(function(email){ %>
+
+                        <% if (inbox.length > 0) { %>
+                            <ul>
+                                <% inbox.forEach(function(email){ %>
                                 <li class="inbox-item">
                                     <a href="/inbox/12345">
                                         <span class="inbox-item-title"><%= email.subject.value %></span>
@@ -47,8 +49,14 @@
                                         <span class="inbox-item-timestamp">Oct 15, 3:00 PM</span>
                                     </a>
                                 </li>
-                            <% }); %>
-                        </ul>
+                                <% }); %>
+                            </ul>
+                        <% } else { %>
+                            <div style="height: 500px; display: flex; justify-content: center; align-items: center;">
+                                <h2>No Mail</h2>
+                            </div>
+                        <% } %>
+
                     </div>
                 </div>
             </div>
