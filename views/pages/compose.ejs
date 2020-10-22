@@ -9,6 +9,11 @@
         <script>
             tinymce.init({
                 selector: "#emailMessage",
+                setup: function (editor) {
+                    editor.on("init", function (e) {
+                        tinymce.get("emailMessage").setContent(atob("<%- (email) ? email.body : '' %>"));
+                    });
+                }
             });
 
             $(document).ready(() => {
@@ -71,7 +76,14 @@
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">TO</div>
                                 </div>
+                                <!-- Only change this for reply / reply-all -->
+                                <% if (email && type == "reply") { %>
+                                    <input type="text" class="form-control" id="toEmail" value="<%= email.from %>">
+                                <% } else if (email && type == "replyall") { %>
+                                    <input type="text" class="form-control" id="toEmail" value="<%= [email.from, ...email.to.filter(x => x != user.email)].join(',') %>">
+                                <% } else { %>
                                     <input type="text" class="form-control" id="toEmail">
+                                <% } %>
                             </div>
                         </div>
 
@@ -81,7 +93,7 @@
                                     <div class="input-group-text">CC</div>
                                 </div>
                                 <!-- Only for reply-all -->
-                                <input type="text" class="form-control" id="ccEmail" >
+                                <input type="text" class="form-control" id="ccEmail" value="<%= (email && type == 'replyall') ? email.cc.join(',') : '' %>">
                             </div>
                         </div>
 
@@ -100,7 +112,11 @@
                                     <div class="input-group-text">Subject</div>
                                 </div>
 
-                                    <input type="text" class="form-control" id="emailSubject" >
+                                <% if (email) { %>
+                                    <input type="text" class="form-control" id="emailSubject" value="<%= (type == 'forward') ? `FWD: ${email.subject}` : email.subject %>">
+                                <% } else { %>
+                                    <input type="text" class="form-control" id="emailSubject">
+                                <% } %>
                             </div>
                         </div>
 
