@@ -33,19 +33,22 @@ body > .row-fluid > .container-fluid > .content-wrapper {
     padding: 0;
     height: 100%;
     width: 100%;
+    background: #FFF;
 }
 
-.email-toolbar {
-
+.email-actions {
+    flex-shrink: 0;
 }
 
 .email-toolbar .email-subject,
 .email-toolbar .email-from,
+.email-toolbar .email-cc,
 .email-toolbar .email-to,
 .email-toolbar .email-date {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    font-size: 0.9em;
 }
 
 .email-toolbar .email-subject {
@@ -60,7 +63,7 @@ body > .row-fluid > .container-fluid > .content-wrapper {
 
     padding: 15px;
     border-bottom: 1px solid #CCC;
-    background: #FFF;
+    background: #efefef;
 }
 
 
@@ -69,7 +72,7 @@ body > .row-fluid > .container-fluid > .content-wrapper {
     display: flex;
     flex-wrap: wrap;
     padding: 5px 10px;
-    background-color: #FFF;
+    background-color: #efefef;
     border-bottom: 1px solid #CCC;
 }
 
@@ -78,7 +81,7 @@ body > .row-fluid > .container-fluid > .content-wrapper {
     align-self: center;
     color: inherit;
     border: 1px solid #aaa;
-    background: #efefef;
+    background: #fff;
     max-width: 200px;
     padding: 0 5px;
     margin: 5px;
