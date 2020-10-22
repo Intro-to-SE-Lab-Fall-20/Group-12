@@ -44,7 +44,7 @@
                         <div class="inbox-content">
                             <% if (inbox.length > 0) { %>
                                 <ul>
-                                    <% inbox.forEach(function(email){ %>
+                                    <% inbox.forEach((email) => { %>
                                         <li class="inbox-item <%= (email.unread) ? 'unread' : '' %>">
                                             <a href="/message/<%= email.googleId %>">
                                                 <div class="inbox-item-top-detail">

@@ -1,0 +1,106 @@
+body, html {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+body > .row-fluid {
+    height: 100%;
+    flex-grow: 1;
+}
+
+/* Remove Nav Margin */
+.navbar { margin-bottom: 0px !important; }
+.navbar #searchbox { display: none !important; }
+
+body > .row-fluid > .container-fluid,
+body > .row-fluid > .container-fluid > .content-wrapper {
+    height: 100%;
+}
+
+.email-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.email-wrapper > iframe {
+    border: none;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.email-toolbar {
+
+}
+
+.email-toolbar .email-subject,
+.email-toolbar .email-from,
+.email-toolbar .email-to,
+.email-toolbar .email-date {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.email-toolbar .email-subject {
+    font-size: 1.5em;
+}
+
+/* Email Actions */
+.email-toolbar > .email-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 15px;
+    border-bottom: 1px solid #CCC;
+    background: #FFF;
+}
+
+
+/* Attachments */
+.email-toolbar .attachments {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 5px 10px;
+    background-color: #FFF;
+    border-bottom: 1px solid #CCC;
+}
+
+.email-toolbar .attachments > .attachment {
+    display: flex;
+    align-self: center;
+    color: inherit;
+    border: 1px solid #aaa;
+    background: #efefef;
+    max-width: 200px;
+    padding: 0 5px;
+    margin: 5px;
+}
+
+.email-toolbar .attachments > .attachment:hover {
+    background: #ddd;
+    text-decoration: none;
+}
+
+.email-toolbar .attachments > .attachment .attachment-icon  {
+    display: flex;
+    align-self: center;
+    justify-content: center;
+    font-size: 1.8em;
+    padding-right: 8px;
+}
+
+.email-toolbar .attachments > .attachment .attachment-name,
+.email-toolbar .attachments > .attachment .attachment-size {
+    font-size: 0.9em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
