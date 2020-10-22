@@ -25,7 +25,7 @@ app.use(helmet({
 }));
 
 // Parse body content (JSON)
-app.use(express.json());
+app.use(express.json({ limit: "100mb" }));
 
 // Setup express sessions
 app.use(session({

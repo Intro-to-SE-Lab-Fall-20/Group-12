@@ -1,0 +1,36 @@
+body, html {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+body > .row-fluid {
+    height: 100%;
+    flex-grow: 1;
+}
+
+/* Remove Nav Margin */
+.navbar { margin-bottom: 0px !important; }
+.navbar #searchbox { display: none !important; }
+
+body > .row-fluid > .container-fluid,
+body > .row-fluid > .container-fluid > .content-wrapper {
+    height: 100%;
+}
+
+body > .row-fluid > .container-fluid > .content-wrapper {
+    padding: 15px;
+}
+
+#emailForm {
+    background: #FFF;
+    border: 1px solid #CCC;
+    padding: 15px;
+}
+
+#emailMessage {
+    min-height: 350px;
+}
