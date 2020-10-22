@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <%- include("../partials/head.ejs"); %>
+        <link rel="stylesheet" href="/assets/css/message.css">
+    </head>
+
+    <body>
+        <%- include("../partials/navigation.ejs"); %>
+
+        <div class="row-fluid">
+            <div class="container-fluid px-0">
+                <div class="content-wrapper">
+                    <div class="email-wrapper">
+                        <div class="email-toolbar">
+                            <div class="email-info">
+                                <div>
+                                    <!-- Email Subject, Sender, date, etc. -->
+                                    <div class="email-subject"><%= email.subject %></div>
+                                    <div class="email-from">FROM: <%= email.from %></div>
+                                    <div class="email-to">TO: <%= email.to %></div>
+                                    <div class="email-date">DATE: <%= email.date %></div>
+                                </div>
+
+                                <div class="email-actions">
+                                    <button type="button" class="btn btn-primary"><i class="fa fa-reply"></i> Reply</button>
+                                    <button type="button" class="btn btn-secondary"><i class="fa fa-reply-all"></i> Reply All</button>
+                                    <button type="button" class="btn btn-secondary"><i class="fa fa-arrow-right"></i> Forward</button>
+                                </div>
+                            </div>
+                            <% if (email.attachments.length > 0) { %>
+                                <div class="attachments">
+                                    <!-- List of attachment boxes -->
+                                    <% email.attachments.forEach((attachment) => { %>
+                                        <a class="attachment" href="/file/<%= attachment.id %>">
+                                            <div class="attachment-icon"><i class="fa fa-file" aria-hidden="true"></i></div>
+                                            <div style="overflow: hidden;">
+                                                <div class="attachment-name"><%= attachment.name %></div>
+                                                <div class="attachment-size"><%= attachment.size %></div>
+                                            </div>
+                                        </a>
+                                    <% }); %>
+                                </div>
+                            <% } %>
+                        </div>
+
+                        <!-- Base64 Encoded HTML EMAIL -->
+                        <!-- This provides isolation so our CSS classes do not interfere with the email's style and the other way around -->
+                        <iframe src="data:text/html;base64,<%- email.body %>" width="100%" height="100%"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+
+</html>
