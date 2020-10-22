@@ -216,4 +216,38 @@ router.get("/message/:id", RequireAuth, GmailAPIMiddleware, async (req, res) => 
     return res.render("pages/message", { user: req.user, email, query: null });
 });
 
+router.get("/message/:messageId/file/:id", RequireAuth, GmailAPIMiddleware, async (req, res) => {
+    if (!req.params["messageId"] || !req.params["id"]) {
+        return res.redirect("/inbox");
+    }
+
+    const emailResponse = await req.gmail.users.messages.get({
+        userId: "me",
+        id: req.params["messageId"]
+    });
+
+    const email = ParseGmailMessageResponse(emailResponse);
+
+    const attachmentResponse = await req.gmail.users.messages.attachments.get({
+        userId: "me",
+        messageId: req.params["messageId"],
+        id: req.params["id"]
+    });
+
+    // Ok, this is due to the IDs being random for each request it seems... wish there was a better way without
+    //  a massive amount of extra work
+    const attachment = email.attachments.find(x => x.size == attachmentResponse.data.size);
+
+    // Get the Base64 encoded version of the file and convert to binary
+    //  then stream it to the user's browser
+    const file = Buffer.from(attachmentResponse.data.data, "base64");
+
+    // Set disposition so the browser knows the content / process of downloading the binary data
+    res.setHeader("Content-disposition", `attachment; filename=${attachment.name}`);
+    res.setHeader("Content-type", attachment.mimeType);
+
+    // Stream the file buffer to the browser for download
+    Readable.from(file).pipe(res);
+});
+
 module.exports = router;
