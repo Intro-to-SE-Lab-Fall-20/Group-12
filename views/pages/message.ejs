@@ -15,29 +15,32 @@
                     <div class="email-wrapper">
                         <div class="email-toolbar">
                             <div class="email-info">
-                                <div>
+                                <div style="overflow: hidden;">
                                     <!-- Email Subject, Sender, date, etc. -->
                                     <div class="email-subject"><%= email.subject %></div>
-                                    <div class="email-from">FROM: <%= email.from %></div>
+                                    <div class="email-cc">FROM: <%= email.from %></div>
+                                    <% if (email.cc.length > 0) { %>
+                                        <div class="email-cc">CC: <%= email.cc %></div>
+                                    <% } %>
                                     <div class="email-to">TO: <%= email.to %></div>
                                     <div class="email-date">DATE: <%= email.date %></div>
                                 </div>
 
                                 <div class="email-actions">
-                                    <button type="button" class="btn btn-primary"><i class="fa fa-reply"></i> Reply</button>
-                                    <button type="button" class="btn btn-secondary"><i class="fa fa-reply-all"></i> Reply All</button>
-                                    <button type="button" class="btn btn-secondary"><i class="fa fa-arrow-right"></i> Forward</button>
+                                    <a href="/compose?messageId=<%= email.googleId %>&type=reply" class="btn btn-primary"><i class="fa fa-reply"></i> Reply</a>
+                                    <a href="/compose?messageId=<%= email.googleId %>&type=replyall" class="btn btn-secondary"><i class="fa fa-reply-all"></i> Reply All</a>
+                                    <a href="/compose?messageId=<%= email.googleId %>&type=forward" class="btn btn-secondary"><i class="fa fa-arrow-right"></i> Forward</a>
                                 </div>
                             </div>
                             <% if (email.attachments.length > 0) { %>
                                 <div class="attachments">
                                     <!-- List of attachment boxes -->
                                     <% email.attachments.forEach((attachment) => { %>
-                                        <a class="attachment" href="/file/<%= attachment.id %>">
+                                        <a class="attachment" href="/message/<%= email.googleId %>/file/<%= attachment.id %>">
                                             <div class="attachment-icon"><i class="fa fa-file" aria-hidden="true"></i></div>
                                             <div style="overflow: hidden;">
                                                 <div class="attachment-name"><%= attachment.name %></div>
-                                                <div class="attachment-size"><%= attachment.size %></div>
+                                                <div class="attachment-size"><%= attachment.displaySize %></div>
                                             </div>
                                         </a>
                                     <% }); %>

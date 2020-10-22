@@ -3,6 +3,9 @@ const router = express.Router();
 const passport = require("passport");
 const { RequireAuth, GmailAPIMiddleware } = require("./middleware");
 const { FormatBytes } = require("./utils");
+const { Readable } = require("stream");
+
+const MailComposer = require("nodemailer/lib/mail-composer");
 
 const dayjs = require("dayjs");
 const tz = require("dayjs/plugin/timezone");
@@ -34,27 +37,38 @@ router.get("/logout", (req, res) => {
 const ParseGmailMessageResponse = (response) => {
     // Emails usually come with multiple parts (Text and a nicer HTML version... we want to display the nice HTML version)
     const payload = response.data.payload;
+    const attachments = [];
 
     // Determine if this is an email or an email with more parts for attachments
     //  why google does this I have 0 clue...
     let emailPart = null;
-    const attachments = [];
-    if (payload.parts[0].parts) {
-        // We have attachments
-        emailPart = payload.parts[0].parts.find(x => x.mimeType == "text/html") || payload.parts[0].parts[0];
+    if (payload.parts) {
+        const mailParts = payload.parts.filter(x => x.filename == "");
+        const attachmentParts = payload.parts.filter(x => x.filename != "");
 
-        // Process the attachments (starting from the second one)
-        for (let i = 1; i < payload.parts.length; i++) {
-            const attachment = payload.parts[i];
+        emailPart = mailParts.find(x => x.mimeType == "text/html") || mailParts[0];
+        if (emailPart.parts) {
+            emailPart = emailPart.parts.find(x => x.mimeType == "text/html") || emailPart.parts[0];
+        }
+
+        for (const attachmentPart of attachmentParts) {
             attachments.push({
-                id: attachment.body.attachmentId,
-                name: attachment.filename,
-                size: FormatBytes(attachment.body.size)
+                id: attachmentPart.body.attachmentId,
+                name: attachmentPart.filename,
+                size: attachmentPart.body.size,
+                displaySize: FormatBytes(attachmentPart.body.size),
+                mimeType: attachmentPart.mimeType
             });
         }
+
+        // console.log("-------------------- PART --------------------");
+        // console.log(mailParts);
+        // console.log("~~~~~~~~~~~~~~~~~~~~~~~~");
+        // console.log(emailPart);
+        // console.log("-------------------- ---- --------------------");
+
     } else {
-        // No attachments
-        emailPart = payload.parts.find(x => x.mimeType == "text/html") || payload.parts[0];
+        emailPart = payload;
     }
 
     // So, we need to decode and "re-encode" BASE64 due to the 1 byte padding used. Browsers dont like that.
@@ -75,9 +89,9 @@ const ParseGmailMessageResponse = (response) => {
         date: dayjs(Number(response.data.internalDate)).format("MMM DD, YYYY @ H:mm A"),
         dateRelative: dayjs(Number(response.data.internalDate)).fromNow(),
         from: GetHeaderValue("From"),
-        to: GetHeaderValue("To").split(", "),
-        cc: GetHeaderValue("Cc").split(", "),
-        subject: GetHeaderValue("Subject"),
+        to: GetHeaderValue("To").split(",").map(x => x.trim()).filter(x => x != ""),
+        cc: GetHeaderValue("Cc").split(",").map(x => x.trim()).filter(x => x != ""),
+        subject: GetHeaderValue("Subject") || "(No Subject)",
         snippet: response.data.snippet,
         body: decodedData.toString("base64"),
         attachments
@@ -89,7 +103,6 @@ router.get("/inbox", RequireAuth, GmailAPIMiddleware, async (req, res) => {
     const q = req.query.query_text;
     const messageResponse = await req.gmail.users.messages.list({
         userId: "me",
-        maxResults: 10,
         labelIds: "INBOX",
         q,
         includeSpamTrash: false
@@ -116,11 +129,80 @@ router.get("/inbox", RequireAuth, GmailAPIMiddleware, async (req, res) => {
     return res.render("pages/inbox", { user: req.user, inbox, meta, query: q });
 });
 
+// Email Composition
+router.get("/compose", RequireAuth, GmailAPIMiddleware, async (req, res) => {
+    const messageId = req.query.messageId;
+    const type = req.query.type;
+    let email = null;
+    if (type && messageId) {
+        const emailResponse = await req.gmail.users.messages.get({
+            userId: "me",
+            id: messageId
+        });
+
+        email = ParseGmailMessageResponse(emailResponse);
+    }
+
+    return res.render("pages/compose", { user: req.user, email, query: null, type });
+});
+
+router.post("/compose", RequireAuth, GmailAPIMiddleware, async (req, res) => {
+    const to = req.body.to || [];
+    const cc = req.body.cc || [];
+    const bcc = req.body.bcc || [];
+    const subject = req.body.subject;
+    const html = req.body.html;
+    const files = req.body.attachments || [];
+
+    if (to.length == 0) {
+        return res.status(400).json({ message: "To field missing" });
+    }
+
+    if (!html) {
+        return res.status(400).json({ message: "Email body missing" });
+    }
+
+    const RFC822 = new MailComposer({
+        to,
+        from: req.user.email,
+        sender: req.user.email,
+        cc,
+        bcc,
+        subject,
+        html,
+        attachments: files.map(file => {
+            return {
+                filename: file.name,
+                path: file.data // Nodemailer can pull the mimeType for us here
+            }
+        })
+    });
+
+    const buffer = await RFC822.compile().build();
+    const messageResponse = await req.gmail.users.messages.send({
+        userId: "me",
+        requestBody: {
+            raw: buffer.toString("base64")
+        }
+    });
+
+    return res.status(200).json(messageResponse);
+});
+
 // Message/Email Detail Rendering
 router.get("/message/:id", RequireAuth, GmailAPIMiddleware, async (req, res) => {
     if (!req.params["id"]) {
         return res.redirect("/inbox");
     }
+
+    // Mark email as read
+    await req.gmail.users.messages.modify({
+        userId: "me",
+        id: req.params["id"],
+        requestBody: {
+            removeLabelIds: "UNREAD"
+        }
+    });
 
     const emailResponse = await req.gmail.users.messages.get({
         userId: "me",
@@ -129,7 +211,43 @@ router.get("/message/:id", RequireAuth, GmailAPIMiddleware, async (req, res) => 
 
     const email = ParseGmailMessageResponse(emailResponse);
 
-    return res.render("pages/message", { user: req.user, email, json: emailResponse.data, query: null });
+    // return res.status(200).json(email);
+
+    return res.render("pages/message", { user: req.user, email, query: null });
+});
+
+router.get("/message/:messageId/file/:id", RequireAuth, GmailAPIMiddleware, async (req, res) => {
+    if (!req.params["messageId"] || !req.params["id"]) {
+        return res.redirect("/inbox");
+    }
+
+    const emailResponse = await req.gmail.users.messages.get({
+        userId: "me",
+        id: req.params["messageId"]
+    });
+
+    const email = ParseGmailMessageResponse(emailResponse);
+
+    const attachmentResponse = await req.gmail.users.messages.attachments.get({
+        userId: "me",
+        messageId: req.params["messageId"],
+        id: req.params["id"]
+    });
+
+    // Ok, this is due to the IDs being random for each request it seems... wish there was a better way without
+    //  a massive amount of extra work
+    const attachment = email.attachments.find(x => x.size == attachmentResponse.data.size);
+
+    // Get the Base64 encoded version of the file and convert to binary
+    //  then stream it to the user's browser
+    const file = Buffer.from(attachmentResponse.data.data, "base64");
+
+    // Set disposition so the browser knows the content / process of downloading the binary data
+    res.setHeader("Content-disposition", `attachment; filename=${attachment.name}`);
+    res.setHeader("Content-type", attachment.mimeType);
+
+    // Stream the file buffer to the browser for download
+    Readable.from(file).pipe(res);
 });
 
 module.exports = router;

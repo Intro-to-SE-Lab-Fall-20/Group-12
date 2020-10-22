@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <%- include("../partials/head.ejs"); %>
+        <link rel="stylesheet" href="/assets/css/compose.css">
+
+        <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+        <script>
+            tinymce.init({
+                selector: "#emailMessage",
+                setup: function (editor) {
+                    editor.on("init", function (e) {
+                        tinymce.get("emailMessage").setContent(atob("<%- (email) ? email.body : '' %>"));
+                    });
+                }
+            });
+
+            $(document).ready(() => {
+                $("#emailForm").submit(async function (e) {
+                    e.preventDefault();
+
+                    const toBase64 = f => new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(f);
+                        reader.onload = () => resolve(reader.result);
+                        reader.onerror = error => reject(error);
+                    });
+
+                    const attachments = [];
+                    const files = $("#attachmentsEmail").prop("files");
+                    for (const file of files) {
+                        attachments.push({
+                            name: file.name,
+                            size: file.size,
+                            mimeType: file.type,
+                            data: await toBase64(file)
+                        });
+                    }
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/compose",
+                        dataType: "json",
+                        contentType: "application/json",
+                        data: JSON.stringify({
+                            to: $("#toEmail").val().split(",").map(x => x.trim()).filter(x => x != ""),
+                            cc: $("#ccEmail").val().split(",").map(x => x.trim()).filter(x => x != ""),
+                            bcc: $("#bccEmail").val().split(",").map(x => x.trim()).filter(x => x != ""),
+                            subject: $("#emailSubject").val(),
+                            html: tinymce.get("emailMessage").getContent(),
+                            attachments: attachments
+                        }),
+                        success: function (data) {
+                            alert("Email Sent!");
+                            window.location.href = "/inbox";
+                        },
+                        error: function (error) {
+                            alert(error.responseJSON.message);
+                        }
+                    });
+                });
+            });
+        </script>
+    </head>
+
+    <body>
+        <%- include("../partials/navigation.ejs"); %>
+
+        <div class="row-fluid">
+            <div class="container-fluid px-0">
+                <div class="content-wrapper">
+                    <form id="emailForm" method="POST">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">TO</div>
+                                </div>
+                                <!-- Only change this for reply / reply-all -->
+                                <% if (email && type == "reply") { %>
+                                    <input type="text" class="form-control" id="toEmail" value="<%= email.from %>">
+                                <% } else if (email && type == "replyall") { %>
+                                    <input type="text" class="form-control" id="toEmail" value="<%= [email.from, ...email.to.filter(x => x != user.email)].join(',') %>">
+                                <% } else { %>
+                                    <input type="text" class="form-control" id="toEmail">
+                                <% } %>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">CC</div>
+                                </div>
+                                <!-- Only for reply-all -->
+                                <input type="text" class="form-control" id="ccEmail" value="<%= (email && type == 'replyall') ? email.cc.join(',') : '' %>">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">BCC</div>
+                                </div>
+                                <input type="text" class="form-control" id="bccEmail">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">Subject</div>
+                                </div>
+
+                                <% if (email) { %>
+                                    <input type="text" class="form-control" id="emailSubject" value="<%= (type == 'forward') ? `FWD: ${email.subject}` : email.subject %>">
+                                <% } else { %>
+                                    <input type="text" class="form-control" id="emailSubject">
+                                <% } %>
+                            </div>
+                        </div>
+
+                        <!-- Attachment forwarding is going to be hard... -->
+                        <div class="form-group">
+                            <div class="input-group mb-2 mr-sm-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">Attachment(s)</div>
+                                </div>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="attachmentsEmail" multiple>
+                                    <label class="custom-file-label">Choose file(s)...</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <textarea class="form-control" id="emailMessage"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </body>
+
+</html>

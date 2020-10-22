@@ -23,18 +23,6 @@
                                         <li>
                                             <a href="/inbox"><i class="fa fa-inbox"></i> Inbox <% if (meta.unread > 0) { %> <span class="badge badge-danger"><%= meta.unread %></span> <% } %></a>
                                         </li>
-                                        <li>
-                                            <a href="#"><i class="fa fa-star"></i> Stared</a>
-                                        </li>
-                                        <li>
-                                            <a href="#"><i class="fa fa-rocket"></i> Sent</a>
-                                        </li>
-                                        <li>
-                                            <a href="#"><i class="fa fa-trash-o"></i> Trash</a>
-                                        </li>
-                                        <li>
-                                            <a href="#"><i class="fa fa-bookmark"></i> Important</span></a>
-                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -49,7 +37,10 @@
                                             <a href="/message/<%= email.googleId %>">
                                                 <div class="inbox-item-top-detail">
                                                     <span class="inbox-item-title"><%= email.from %></span>
-                                                    <span class="inbox-item-timestamp"><%= email.date %></span>
+                                                    <div>
+                                                        <% if (email.attachments.length > 0) { %><i class="fa fa-paperclip" aria-hidden="true"></i><% } %>
+                                                        <span class="inbox-item-timestamp"><%= email.date %></span>
+                                                    </div>
                                                 </div>
                                                 <!-- DANGER (Here we are accepting character that Google says they escape!!!) -->
                                                 <span class="inbox-item-description"><%- email.snippet %></span>
