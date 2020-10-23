@@ -1,9 +1,13 @@
 const app = require("../app");
 const request = require("supertest")(app);
-let server = null;
+const server = app.listen(process.env.PORT || 3000);
 
-beforeAll(() => { server = app.listen(process.env.PORT || 3000); });
-afterAll(() => { server.close(); });
+const mongoose = require("mongoose");
+
+afterAll(async () => {
+    server.close();
+    await mongoose.connection.close();
+});
 
 describe("Route Tests", () => {
     // Authenticated Testing???
