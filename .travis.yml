@@ -3,6 +3,8 @@ node_js:
   - 12
 services:
   - mongodb
+before_install:
+  - export TZ=America/Chicago
 before_script:
   - |
     cat > .env <<EOL
