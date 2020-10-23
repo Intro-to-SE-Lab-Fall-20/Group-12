@@ -4,8 +4,11 @@ node_js:
 services:
   - mongodb
 before_script:
+  - |
+    cat > .env <<EOL
+    APPLICATION_NAME=MemeMail
+    APPLICATION_COOKIE_SECRET=secret
+    APPLICATION_DATABASE_URL=mongodb://127.0.0.1:27017/mememail?readPreference=primary&ssl=false
+    EOL
   - sleep 15
 env:
-  - APPLICATION_NAME=MemeMail
-  - APPLICATION_COOKIE_SECRET=secret
-  - APPLICATION_DATABASE_URL=mongodb://127.0.0.1:27017/mememail?readPreference=primary&ssl=false
