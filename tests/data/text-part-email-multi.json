@@ -1,0 +1,141 @@
+{
+    "config": {
+        "url": "https://www.googleapis.com/gmail/v1/users/me/messages/17554351cc57f70f",
+        "method": "GET",
+        "headers": {
+            "Accept-Encoding": "gzip",
+            "User-Agent": "google-api-nodejs-client/0.7.2 (gzip)",
+            "Authorization": "",
+            "Accept": "application/json"
+        },
+        "params": {},
+        "responseType": "json"
+    },
+    "data": {
+        "id": "17554351cc57f70f",
+        "threadId": "17554351cc57f70f",
+        "labelIds": [
+            "CATEGORY_PERSONAL",
+            "INBOX"
+        ],
+        "snippet": "This is an email with multiple recipients.",
+        "payload": {
+            "partId": "",
+            "mimeType": "text/plain",
+            "filename": "",
+            "headers": [
+                {
+                    "name": "Delivered-To",
+                    "value": "mememailapi@gmail.com"
+                },
+                {
+                    "name": "Received",
+                    "value": "by 2002:ac9:30c6:0:0:0:0:0 with SMTP id q6csp287678occ;        Thu, 22 Oct 2020 23:46:08 -0700 (PDT)"
+                },
+                {
+                    "name": "X-Received",
+                    "value": "by 2002:a17:906:3650:: with SMTP id r16mr560413ejb.419.1603435568502;        Thu, 22 Oct 2020 23:46:08 -0700 (PDT)"
+                },
+                {
+                    "name": "ARC-Seal",
+                    "value": "i=1; a=rsa-sha256; t=1603435568; cv=none;        d=google.com; s=arc-20160816;        b=CfQvLRh0hZcO7DgPUknnKqMol8xWwHn2ainfk7pi6gsWQM+wJdvaE0FoNS7/fjcHpw         p+PGKfHuRdr2PXkM4Rehb0p/0rV23AroMid/3sCuFGPrE4CVi6nyBPMWBf1SEkZIWLQP         PStOUlVo+Q5s+l5G+Hb6JdPG01Cmoc8YZJBAn3PlSvNgBwZ4/y2ZQPrv4F1o+I0N8NKz         INsSyNrqhgmCnQ5oZ0aEv/zIAsO/7VKpFpIRQxtYuRZIBnwfjBHTSYXojH7DxSlxYuHZ         NlwtPgq0mLw5yierF9601JzCA7bWnG8sgtBMxEUKK4oVZlyDGKSg/0oHNw8VNDQR/gB2         OWOw=="
+                },
+                {
+                    "name": "ARC-Message-Signature",
+                    "value": "i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;        h=to:subject:message-id:date:from:mime-version:dkim-signature;        bh=Y8SurR0NS3NOo3cLDyHNQ/9H2kyMxPS4QLVk1YWvBKc=;        b=BdkvRqNwBDwhphQ/TcFX7z/NN3EMAhHlxJDKflX3uYht0xCk8lMnGfCHGM39AhdRlz         wVpuz0rbghwBtajhhajpfAnnhp18j/k3UEK9F8Byvdr65lL2ubJ7BeYo8lHPKthh4WQX         XgVrV0wZEyYgU+28SW0YbAupLdruVfrV/ttsa/0kRrkPJ9NdH1nyg1RigeiXq1YkUn3W         SgZ2dzxJHPLemTVUcOs3q8zJH/JW8BkGB3mXaAqEvagUvFzIrY+Yhopz1v8kBrlNrKBy         2iH0nt8IXi89Sn2OKfm+Y06UxSoIWylb5G/4GhvGTdAZrpZsZHaAW4Pz85xQLmsrvC3g         oq1Q=="
+                },
+                {
+                    "name": "ARC-Authentication-Results",
+                    "value": "i=1; mx.google.com;       dkim=pass header.i=@gmail.com header.s=20161025 header.b=Eoy2f7Ts;       spf=pass (google.com: domain of huntermitchell386@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=huntermitchell386@gmail.com;       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com"
+                },
+                {
+                    "name": "Return-Path",
+                    "value": "<huntermitchell386@gmail.com>"
+                },
+                {
+                    "name": "Received",
+                    "value": "from mail-sor-f41.google.com (mail-sor-f41.google.com. [209.85.220.41])        by mx.google.com with SMTPS id do13sor347896ejc.14.2020.10.22.23.46.08        for <mememailapi@gmail.com>        (Google Transport Security);        Thu, 22 Oct 2020 23:46:08 -0700 (PDT)"
+                },
+                {
+                    "name": "Received-SPF",
+                    "value": "pass (google.com: domain of huntermitchell386@gmail.com designates 209.85.220.41 as permitted sender) client-ip=209.85.220.41;"
+                },
+                {
+                    "name": "Authentication-Results",
+                    "value": "mx.google.com;       dkim=pass header.i=@gmail.com header.s=20161025 header.b=Eoy2f7Ts;       spf=pass (google.com: domain of huntermitchell386@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=huntermitchell386@gmail.com;       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com"
+                },
+                {
+                    "name": "DKIM-Signature",
+                    "value": "v=1; a=rsa-sha256; c=relaxed/relaxed;        d=gmail.com; s=20161025;        h=mime-version:from:date:message-id:subject:to;        bh=Y8SurR0NS3NOo3cLDyHNQ/9H2kyMxPS4QLVk1YWvBKc=;        b=Eoy2f7TsNrAQMlPftSvpId3kg+s3a+XjzxoOnMzvPtCoGdkyP6hNgAH+i9iaXJJazo         OK2wAsGOM77euvtQwOFAr1BhKhjs74vwiNkzHbjzPdbRYAr0xlJ11fQZYtDvbEmkshO4         CT/LOpF4m/lzUTu5cvUfLqsG7YOvjliNNl3Tm3Kt6kWfzGCExP1cCkcxrvDwiydktv9/         g9llF1+L8ryfwOhA8swHTGxAim4PrWpfj3wsx6SfTt9DMK0CrTNreUNM+oVp6fNbe6BQ         MKkqDJ79voTuxGXw/PoXJIhhlCAUkis2b/dLE2Hg1/BhaXYA0ueFWrj2pkt1DaxwRkjs         CCcQ=="
+                },
+                {
+                    "name": "X-Google-DKIM-Signature",
+                    "value": "v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20161025;        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;        bh=Y8SurR0NS3NOo3cLDyHNQ/9H2kyMxPS4QLVk1YWvBKc=;        b=EQcJFxMizaH8RmnOxBuXQbxt8rc9VeZpgDmMhC8y9kyODP7trkZScrpEl6DSvFJwPz         IdvqZJQ3vlsJkTM8mEdv8yT61Vom8SY8Xc/neMu7q36Pb9xb1Z/NC6O55qiqUy3SY8M/         8vaYyoULS4mEYmpHJ75RP5FGPouKrdE5nMQXPs3ds+4PiUPafNrcr/fx3tC/oFaD9HUq         G5QYb5DxzhtPFrdbPqk64ovXXjMNriA21sjzx7tAvdUTzYS+Ps/YSIF2DIYdgnuOw5ar         o3297u9wIstIVJiwRMSI+A9cNjociXP1CioxxZ0JgnCAgZZzqxMvPbfK7WoWg7ApYDil         WFeA=="
+                },
+                {
+                    "name": "X-Gm-Message-State",
+                    "value": "AOAM532uQRXegvnZQ7zlwC788Ds440C9q0LpDH+tVBpKgrYJtYG1thGV GJxjqDJosiQg3JygrsKZrRatwxPbbWbhLJNfwY7JnQ+NpsU="
+                },
+                {
+                    "name": "X-Google-Smtp-Source",
+                    "value": "ABdhPJzeSpZo0/gdEzdOBEbhllCBU7t563nIEdY5TrOoUzrWUYxKqBJqBcQoapWu2p+CMjOZhOJY0O7+R+M0IZ4tjAQ="
+                },
+                {
+                    "name": "X-Received",
+                    "value": "by 2002:a17:906:7a51:: with SMTP id i17mr590950ejo.234.1603435567844; Thu, 22 Oct 2020 23:46:07 -0700 (PDT)"
+                },
+                {
+                    "name": "MIME-Version",
+                    "value": "1.0"
+                },
+                {
+                    "name": "From",
+                    "value": "Hunter Mitchell <huntermitchell386@gmail.com>"
+                },
+                {
+                    "name": "Date",
+                    "value": "Fri, 23 Oct 2020 01:45:52 -0500"
+                },
+                {
+                    "name": "Message-ID",
+                    "value": "<CAG3gqVi4XX63S_zr=cg5WbDvn3=fALUNxDheruATtV0CXPLo4w@mail.gmail.com>"
+                },
+                {
+                    "name": "Subject",
+                    "value": "Email with Multiple Recipients"
+                },
+                {
+                    "name": "To",
+                    "value": "mememailapi@gmail.com, Hunter Mitchell <contact@hunter.dev>"
+                },
+                {
+                    "name": "Content-Type",
+                    "value": "text/plain; charset=\"UTF-8\""
+                }
+            ],
+            "body": {
+                "size": 44,
+                "data": "VGhpcyBpcyBhbiBlbWFpbCB3aXRoIG11bHRpcGxlIHJlY2lwaWVudHMuDQo="
+            }
+        },
+        "sizeEstimate": 4601,
+        "historyId": "5867",
+        "internalDate": "1603435552000"
+    },
+    "headers": {
+        "alt-svc": "h3-Q050=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"",
+        "cache-control": "private",
+        "connection": "close",
+        "content-encoding": "gzip",
+        "content-type": "application/json; charset=UTF-8",
+        "date": "Fri, 23 Oct 2020 06:46:32 GMT",
+        "server": "ESF",
+        "transfer-encoding": "chunked",
+        "vary": "Origin, X-Origin, Referer",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "SAMEORIGIN",
+        "x-xss-protection": "0"
+    },
+    "status": 200,
+    "statusText": "OK"
+}

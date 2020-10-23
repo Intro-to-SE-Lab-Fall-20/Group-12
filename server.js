@@ -1,8 +1,4 @@
-const dotenv = require("dotenv");
-// Load env variables from .env file
-dotenv.config({
-    path: (process.env.NODE_ENV === "production") ? ".env.prod" : ".env.dev"
-});
+require("dotenv").config();
 
 const os = require("os");
 const app = require("./app");

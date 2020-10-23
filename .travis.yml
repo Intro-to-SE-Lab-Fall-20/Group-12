@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+  - 12
+services:
+  - mongodb
+before_script:
+  - sleep 15
+env:
+  - APPLICATION_NAME=MemeMail
+  - APPLICATION_COOKIE_SECRET=secret
+  - APPLICATION_DATABASE_URL=mongodb://127.0.0.1:27017/mememail?readPreference=primary&ssl=false

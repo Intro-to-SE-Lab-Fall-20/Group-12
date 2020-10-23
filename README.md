@@ -49,5 +49,9 @@ Run `npm start` to spin up the webapp locally.
 ## Development
 Run `npm run dev` to spin up the webapp locally for development. The app will automatically reload if you change any of the source files.
 
+```
+NOTE: A `.env` file is required in order to run the server, as it contains secrets used to communicate with the Google & Gmail APIs. If you need this file, reach out to anyone on the team.
+```
+
 ## Test
 Run `npm test` to run tests.
