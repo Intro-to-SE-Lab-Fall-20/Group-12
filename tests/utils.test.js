@@ -18,6 +18,14 @@ describe("FormatBytes", () => {
     it("1073741824 Bytes = 1 GB", () => {
         expect(FormatBytes(1073741824)).toBe("1 GB");
     });
+
+    it("1099511627776 Bytes = 1 TB", () => {
+        expect(FormatBytes(1099511627776)).toBe("1 TB");
+    });
+
+    it("1125899910000000 Bytes = 1 PB", () => {
+        expect(FormatBytes(1125899910000000)).toBe("1 PB");
+    });
 });
 
 describe("Gmail Message Parser", () => {

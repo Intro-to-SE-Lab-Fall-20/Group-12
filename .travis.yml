@@ -11,6 +11,9 @@ before_script:
     APPLICATION_NAME=MemeMail
     APPLICATION_COOKIE_SECRET=secret
     APPLICATION_DATABASE_URL=mongodb://127.0.0.1:27017/mememail?readPreference=primary&ssl=false
+    GOOGLE_CLIENT_ID=NULL
+    GOOGLE_CLIENT_SECRET=NULL
+    GOOGLE_REDIRECT_URL=http://localhost:3000/auth/google/callback
+    GMAIL_API_KEY=NULL
     EOL
   - sleep 15
-env:
