@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <%- include("../partials/head.ejs"); %>
+        <link rel="stylesheet" href="/assets/css/notes.css">
+        <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+        <script>
+            tinymce.init({
+                selector: "#notes",
+                plugins: [
+                    "advlist autolink lists link image charmap print preview anchor",
+                    "searchreplace visualblocks code fullscreen",
+                    "insertdatetime media table paste autoresize"
+                ],
+                toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+                setup: function (editor) {
+                    editor.on("init", function (e) {
+                        tinymce.get("notes").setContent(localStorage.getItem("notes"));
+                    });
+
+                    editor.on('Paste Change input Undo Redo', tinymce.util.Delay.debounce(function (e) {
+                        // editor.save();
+                        localStorage.setItem("notes", editor.getContent());
+                    }, 250));
+                },
+                resize: false
+            });
+        </script>
+    </head>
+
+    <body>
+        <div class="header">
+            NOTES
+        </div>
+
+        <div class="row-fluid">
+            <div class="container-fluid px-0">
+                <div class="content-wrapper">
+                    <textarea id="notes" cols="30" rows="10"></textarea>
+                </div>
+            </div>
+        </div>
+
+    </body>
+
+</html>
