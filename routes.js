@@ -7,28 +7,32 @@ const { Readable } = require("stream");
 
 const MailComposer = require("nodemailer/lib/mail-composer");
 
-// Register Routes for the MemeMail API
 router.get("/", (req, res) => {
+    res.render("pages/landing");
+});
+
+// Register Routes for the MemeMail API
+router.get("/mail", (req, res) => {
     if (req.isAuthenticated()) {
-        return res.redirect("/inbox");
+        return res.redirect("/mail/inbox");
     }
     return res.render("pages/index");
 });
 
 // Auth Routes
-router.get("/auth/google", passport.authenticate("google", {
+router.get("/mail/auth/google", passport.authenticate("google", {
     scope: ["profile", "email", "https://mail.google.com/"]
 }));
 
-router.get("/auth/google/callback", passport.authenticate("google", { failureRedirect: "/", successRedirect: "/inbox" }));
+router.get("/mail/auth/google/callback", passport.authenticate("google", { failureRedirect: "/mail", successRedirect: "/mail/inbox" }));
 
-router.get("/logout", (req, res) => {
+router.get("/mail/logout", (req, res) => {
     req.logout();
-    return res.redirect("/");
+    return res.redirect("/mail");
 });
 
 // Other Routes
-router.get("/inbox", RequireAuth, GmailAPIMiddleware, async (req, res) => {
+router.get("/mail/inbox", RequireAuth, GmailAPIMiddleware, async (req, res) => {
     const q = req.query.query_text;
     const messageResponse = await req.gmail.users.messages.list({
         userId: "me",
@@ -59,7 +63,7 @@ router.get("/inbox", RequireAuth, GmailAPIMiddleware, async (req, res) => {
 });
 
 // Email Composition
-router.get("/compose", RequireAuth, GmailAPIMiddleware, async (req, res) => {
+router.get("/mail/compose", RequireAuth, GmailAPIMiddleware, async (req, res) => {
     const messageId = req.query.messageId;
     const type = req.query.type;
     let email = null;
@@ -75,7 +79,7 @@ router.get("/compose", RequireAuth, GmailAPIMiddleware, async (req, res) => {
     return res.render("pages/compose", { user: req.user, email, query: null, type });
 });
 
-router.post("/compose", RequireAuth, GmailAPIMiddleware, async (req, res) => {
+router.post("/mail/compose", RequireAuth, GmailAPIMiddleware, async (req, res) => {
     const to = req.body.to || [];
     const cc = req.body.cc || [];
     const bcc = req.body.bcc || [];
@@ -119,9 +123,9 @@ router.post("/compose", RequireAuth, GmailAPIMiddleware, async (req, res) => {
 });
 
 // Message/Email Detail Rendering
-router.get("/message/:id", RequireAuth, GmailAPIMiddleware, async (req, res) => {
+router.get("/mail/message/:id", RequireAuth, GmailAPIMiddleware, async (req, res) => {
     if (!req.params["id"]) {
-        return res.redirect("/inbox");
+        return res.redirect("/mail/inbox");
     }
 
     // Mark email as read
@@ -147,9 +151,9 @@ router.get("/message/:id", RequireAuth, GmailAPIMiddleware, async (req, res) => 
     return res.render("pages/message", { user: req.user, email, query: null });
 });
 
-router.get("/message/:messageId/file/:id", RequireAuth, GmailAPIMiddleware, async (req, res) => {
+router.get("/mail/message/:messageId/file/:id", RequireAuth, GmailAPIMiddleware, async (req, res) => {
     if (!req.params["messageId"] || !req.params["id"]) {
-        return res.redirect("/inbox");
+        return res.redirect("/mail/inbox");
     }
 
     const emailResponse = await req.gmail.users.messages.get({

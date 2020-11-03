@@ -40,7 +40,7 @@
 
                     $.ajax({
                         type: "POST",
-                        url: "/compose",
+                        url: "/mail/compose",
                         dataType: "json",
                         contentType: "application/json",
                         data: JSON.stringify({
@@ -53,7 +53,7 @@
                         }),
                         success: function (data) {
                             alert("Email Sent!");
-                            window.location.href = "/inbox";
+                            window.location.href = "/mail/inbox";
                         },
                         error: function (error) {
                             alert(error.responseJSON.message);

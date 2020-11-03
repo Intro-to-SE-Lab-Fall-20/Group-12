@@ -7,6 +7,8 @@ const mongoose = require("./mongoose")(process.env.APPLICATION_DATABASE_URL);
 const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
 
+const basicAuth = require("express-basic-auth");
+
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
@@ -23,6 +25,11 @@ app.enable("trust proxy");
 app.use(helmet({
     contentSecurityPolicy: false, // Not in real production tho
 }));
+
+// Use Basic Auth for "Master Password" according to requirements
+const users = {};
+users[process.env.APPLICATION_MASTER_USERNAME] = process.env.APPLICATION_MASTER_PASSWORD
+app.use(basicAuth({ users, challenge: true }));
 
 // Parse body content (JSON)
 app.use(express.json({ limit: "100mb" }));
