@@ -15,19 +15,19 @@ describe("Route Tests", () => {
 
 
     // Unauthenticated tests on endpoints
-    it('[Unauthenticated] GET /inbox - User should be redirected to /', async () => {
-        await request.get("/inbox").expect(302).expect("location", "/");
+    it('[Unauthenticated] GET /mail/inbox - User should be redirected to /mail', async () => {
+        await request.get("/mail/inbox").expect(302).expect("location", "/mail");
     });
 
-    it('[Unauthenticated] GET /message/1 - User should be redirected to /', async () => {
-        await request.get("/message/1").expect(302).expect("location", "/");
+    it('[Unauthenticated] GET /mail/message/1 - User should be redirected to /mail', async () => {
+        await request.get("/mail/message/1").expect(302).expect("location", "/mail");
     });
 
-    it('[Unauthenticated] GET /message/1/file/1 - User should be redirected to /', async () => {
-        await request.get("/message/1/file/1").expect(302).expect("location", "/");
+    it('[Unauthenticated] GET /mail/message/1/file/1 - User should be redirected to /mail', async () => {
+        await request.get("/mail/message/1/file/1").expect(302).expect("location", "/mail");
     });
 
-    it('[Unauthenticated] GET /compose - User should be redirected to /', async () => {
-        await request.get("/compose").expect(302).expect("location", "/");
+    it('[Unauthenticated] GET /mail/compose - User should be redirected to /mail', async () => {
+        await request.get("/mail/compose").expect(302).expect("location", "/mail");
     });
 });

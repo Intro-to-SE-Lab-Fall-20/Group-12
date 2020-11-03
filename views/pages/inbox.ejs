@@ -16,12 +16,12 @@
                         <div id="inbox-sidebar">
                             <div class="inbox-sidebar">
                                 <div class="sidebar-section">
-                                    <a href="/compose" class="btn btn-danger btn-block">New Email</a>
+                                    <a href="/mail/compose" class="btn btn-danger btn-block">New Email</a>
 
                                     <ul>
                                         <li class="title">Menu</li>
                                         <li>
-                                            <a href="/inbox"><i class="fa fa-inbox"></i> Inbox <% if (meta.unread > 0) { %> <span class="badge badge-danger"><%= meta.unread %></span> <% } %></a>
+                                            <a href="/mail/inbox"><i class="fa fa-inbox"></i> Inbox <% if (meta.unread > 0) { %> <span class="badge badge-danger"><%= meta.unread %></span> <% } %></a>
                                         </li>
                                     </ul>
                                 </div>
@@ -34,7 +34,7 @@
                                 <ul>
                                     <% inbox.forEach((email) => { %>
                                         <li class="inbox-item <%= (email.unread) ? 'unread' : '' %>">
-                                            <a href="/message/<%= email.googleId %>">
+                                            <a href="/mail/message/<%= email.googleId %>">
                                                 <div class="inbox-item-top-detail">
                                                     <span class="inbox-item-title"><%= email.from %></span>
                                                     <div>
