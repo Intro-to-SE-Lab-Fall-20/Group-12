@@ -7,9 +7,23 @@ const { Readable } = require("stream");
 
 const MailComposer = require("nodemailer/lib/mail-composer");
 
+
+// This file SHOULD be broken up into more files... but YOLO
 router.get("/", (req, res) => {
     res.render("pages/landing");
 });
+
+/// //////////////////////////
+/// NOTES ENDPOINTS
+/// //////////////////////////
+router.get("/notes", (req, res) => {
+    return res.render("pages/notes");
+});
+
+
+/// //////////////////////////
+/// MAIL ENDPOINTS
+/// //////////////////////////
 
 // Register Routes for the MemeMail API
 router.get("/mail", (req, res) => {
