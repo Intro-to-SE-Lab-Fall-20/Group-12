@@ -1,16 +1,24 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-const { RequireAuth, GmailAPIMiddleware } = require("./middleware");
+const { RequireAuth, GmailAPIMiddleware, TimeoutCheck } = require("./middleware");
 const { ParseGmailMessageResponse } = require("./utils");
 const { Readable } = require("stream");
 
 const MailComposer = require("nodemailer/lib/mail-composer");
+const mongoose = require("mongoose");
 
 
 // This file SHOULD be broken up into more files... but YOLO
 router.get("/", (req, res) => {
     res.render("pages/landing");
+});
+
+router.get("/health", (req, res) => {
+    if (mongoose.connection) {
+        return res.status(200).send("OK");
+    }
+    return res.status(500).send("OOF");
 });
 
 /// //////////////////////////
@@ -34,11 +42,30 @@ router.get("/mail", (req, res) => {
 });
 
 // Auth Routes
-router.get("/mail/auth/google", passport.authenticate("google", {
+router.get("/mail/auth/google", TimeoutCheck, passport.authenticate("google", {
     scope: ["profile", "email", "https://mail.google.com/"]
 }));
 
-router.get("/mail/auth/google/callback", passport.authenticate("google", { failureRedirect: "/mail", successRedirect: "/mail/inbox" }));
+router.get("/mail/auth/failure", (req, res) => {
+    if (req.session) {
+        if (!req.session.failedLogins) {
+            req.session.failedLogins = 1;
+        } else {
+            req.session.failedLogins += 1;
+        }
+
+        // Login Lock
+        if (req.session.failedLogins >= process.env.APPLICATION_FAILED_LOGIN_ATTEMPTS) {
+            const unlockDate = new Date();
+            unlockDate.setSeconds(unlockDate.getSeconds() + Number(process.env.APPLICATION_FAILED_LOGIN_TIMEOUT));
+            req.session.canLogin = unlockDate;
+        }
+        req.session.save();
+    }
+    return res.redirect("/mail");
+});
+
+router.get("/mail/auth/google/callback", passport.authenticate("google", { failureRedirect: "/mail/auth/failure", successRedirect: "/mail/inbox" }));
 
 router.get("/mail/logout", (req, res) => {
     req.logout();

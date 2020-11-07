@@ -9,7 +9,9 @@ afterAll(async () => {
     await mongoose.connection.close();
 });
 
-describe("Route Tests", () => {
+// Make sure all endpoints for mail require authentication
+
+describe("[ROUTES] Route Tests", () => {
     // Authenticated Testing???
     // We are using OAuth, so we aren't able to test authenticated login without having to Mock the entire OAuth flow
 

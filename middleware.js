@@ -5,6 +5,18 @@ module.exports.RequireAuth = (req, res, next) => {
     res.redirect("/mail");
 }
 
+module.exports.TimeoutCheck = (req, res, next) => {
+    if (req.session && req.session.canLogin) {
+        if (new Date() < new Date(req.session.canLogin)) {
+            return res.status(401).send(`Unable to login until ${req.session.canLogin.toLocaleString()}`);
+        }
+    }
+
+    req.session.failedLogins = 0;
+    req.session.save();
+    next();
+}
+
 const { google } = require("googleapis");
 const { OAuth2Client } = require("google-auth-library");
 
